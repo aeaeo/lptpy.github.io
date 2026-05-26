@@ -6,7 +6,7 @@
   <title>Методологічний посібник: Основи Python для 7-9 класів</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.29.4/full/pyodide.js"></script>
 
   <style>
     :root {
@@ -513,7 +513,9 @@ function showPage(pageId) {
 // Ініціалізація Pyodide
 async function initPythonEnvironment() {
   try {
-    pyodideInstance = await loadPyodide();
+    pyodideInstance = await loadPyodide({
+  	  indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.4/full/"
+  	});
     
     // Перевизначаємо вбудовану функцію input на рівні ядра Python
     // Використовуємо чисту ін'єкцію через global namespace без exec ланцюжків
