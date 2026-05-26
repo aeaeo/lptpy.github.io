@@ -608,10 +608,9 @@ async function initPythonEnvironment() {
 	// Bind internal input() tool to Python via JS bridge
     await pyodideInstance.runPythonAsync(`
 		import builtins
-		import js
 
 		def python_input_bridge(prompt_text=""):
-			return js.globals.get("browser_prompt")(prompt_text)
+			return browser_prompt(prompt_text)
 
 		builtins.input = python_input_bridge
 	`);
