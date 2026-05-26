@@ -1,2 +1,2 @@
 # lptpy.github.io
-Python basics for beginners 7-9 grade
+Initial python course for beginners. Oriented to a 7-9 grade school students.
