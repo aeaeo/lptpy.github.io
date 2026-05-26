@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Методологічний посібник: Основи Python для 7-9 класів</title>
+  <title>Свободний міні-курс Python для 7-9 класів</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/pyodide/v0.29.4/full/pyodide.js"></script>
 
   <style>
     :root {
-      --primary: #3498db;
-      --primary-dark: #2980b9;
-      --secondary: #2ecc71;
-      --dark: #2c3e50;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --dark: #0f172a;
       --bg: #f8fafc;
       --text: #334155;
       --border: #e2e8f0;
@@ -21,69 +21,63 @@
     
     body { font-family: 'Inter', sans-serif; margin:0; background: var(--bg); color: var(--text); line-height: 1.6; }
     
-    /* Індикатор завантаження */
-    .status-loading { text-align: center; padding: 12px 20px; background: #feebc8; color: #c05621; font-weight: bold; position: fixed; top: 15px; right: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; transition: opacity 0.5s ease; }
+    .status-loading { text-align: center; padding: 12px 20px; background: #fef3c7; color: #92400e; font-weight: bold; position: fixed; top: 15px; right: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; transition: opacity 0.5s ease; }
 
-    header { background: linear-gradient(135deg, var(--dark), #1e3a8a); color:white; padding: 50px 20px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    header h1 { margin: 0; font-size: 2.5rem; font-weight: 700; }
-    header p { margin: 10px 0 0; opacity: 0.9; font-size: 1.1rem; }
+    header { background: linear-gradient(135deg, var(--dark), #1e3a8a); color:white; padding: 60px 20px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    header h1 { margin: 0; font-size: 2.6rem; font-weight: 700; letter-spacing: -0.5px; }
+    header p { margin: 12px 0 0; opacity: 0.9; font-size: 1.2rem; max-width: 800px; margin-left: auto; margin-right: auto; }
 
-    /* Головний контейнер */
-    .main-wrapper { display: flex; max-width: 1500px; margin: 30px auto; padding: 0 20px; gap: 30px; }
+    .main-wrapper { display: flex; max-width: 1600px; margin: 40px auto; padding: 0 20px; gap: 30px; }
     
-    /* Бічна навігація (Етапи) */
-    nav { width: 320px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); height: fit-content; position: sticky; top: 20px; border: 1px solid var(--border); }
-    nav h3 { margin-top: 0; padding-bottom: 12px; border-bottom: 2px solid var(--border); color: var(--dark); font-size: 1.2rem; }
+    nav { width: 340px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; border: 1px solid var(--border); }
+    nav h3 { margin-top: 0; padding-bottom: 12px; border-bottom: 2px solid var(--border); color: var(--dark); font-size: 1.25rem; }
     nav button { display: flex; align-items: center; width: 100%; text-align: left; padding: 12px 15px; background: none; border: none; border-radius: 8px; color: #475569; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-bottom: 6px; font-size: 0.95rem; }
     nav button:hover { background: #f1f5f9; color: var(--primary); }
-    nav button.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
+    nav button.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
 
-    /* Контентна область */
     .content-area { flex: 1; min-width: 0; }
-    .page { display: none; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid var(--border); }
+    .page { display: none; background: white; padding: 45px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid var(--border); }
     .page.active { display: block; }
 
-    h2 { color: var(--dark); margin-top: 0; font-size: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 15px; font-weight: 700; }
-    h3 { color: var(--dark); margin-top: 30px; font-size: 1.3rem; border-left: 4px solid var(--primary); padding-left: 10px; }
-    h4 { color: #1e293b; margin-top: 20px; font-size: 1.1rem; }
+    h2 { color: var(--dark); margin-top: 0; font-size: 2.2rem; border-bottom: 2px solid var(--border); padding-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; }
+    h3 { color: var(--dark); margin-top: 35px; font-size: 1.4rem; border-left: 4px solid var(--primary); padding-left: 12px; font-weight: 600; }
+    h4 { color: #1e293b; margin-top: 25px; font-size: 1.15rem; font-weight: 600; }
 
-    /* Педагогічна тріада (Мета-блок) */
-    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 25px 0; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid var(--border); }
-    .meta-item b { display: block; color: #1e293b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 25px 0; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid var(--border); }
+    .meta-item b { display: block; color: var(--dark); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 
-    /* Посилання на літературу та YouTube */
-    .resources-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 10px; margin: 25px 0; }
-    .resources-box h4 { margin-top: 0; color: #166534; }
-    .resources-list { display: flex; flex-direction: column; gap: 10px; }
-    .resource-link { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; color: #1e293b; transition: color 0.2s; }
-    .resource-link:hover { color: var(--primary); }
-    .resource-link .tag { padding: 3px 8px; font-size: 0.75rem; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
-    .tag-book { background: #dbeafe; color: #1e40af; }
-    .tag-video { background: #fee2e2; color: #991b1b; }
-    .tag-search { background: #fef3c7; color: #92400e; }
+    .architecture-box { background: #f8fafc; border-left: 4px solid #64748b; padding: 15px 20px; margin: 15px 0; font-family: monospace; font-size: 0.95rem; white-space: pre; overflow-x: auto; color: #334155; }
 
-    /* Завдання для контролю */
-    .control-box { background: #fffbeb; border: 1px solid #fef3c7; padding: 25px; border-radius: 10px; margin-top: 30px; }
-    .control-box h4 { margin-top: 0; color: #92400e; font-size: 1.2rem; }
+    .resources-box { background: #eff6ff; border: 1px solid #bfdbfe; padding: 25px; border-radius: 10px; margin: 30px 0; }
+    .resources-box h4 { margin-top: 0; color: #1e40af; font-size: 1.2rem; }
+    .resources-list { display: flex; flex-direction: column; gap: 12px; }
+    .resource-link { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; text-decoration: none; color: #1e293b; transition: color 0.2s; font-size: 0.95rem; }
+    .resource-link:hover { color: var(--primary); text-decoration: underline; }
+    .resource-link .tag { padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tag-book { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .tag-video { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
-    /* Інтерактивний редактор коду */
-    .editor-zone { margin-top: 30px; background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .editor-label { color: #94a3b8; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    textarea { width: 100%; height: 140px; background: #0f172a; color: #38bdf8; border: 1px solid #334155; border-radius: 8px; padding: 15px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 1rem; resize: vertical; box-sizing: border-box; line-height: 1.5; }
-    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
+    .control-box { background: #fffbeb; border: 1px solid #fef3c7; padding: 25px; border-radius: 10px; margin-top: 35px; }
+    .control-box h4 { margin-top: 0; color: #92400e; font-size: 1.25rem; }
+    .task-level { margin-bottom: 15px; }
+    .task-level b { color: #b45309; font-size: 0.95rem; display: block; margin-bottom: 4px; }
+
+    .editor-zone { margin-top: 35px; background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .editor-label { color: #94a3b8; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    textarea { width: 100%; height: 180px; background: #0f172a; color: #38bdf8; border: 1px solid #334155; border-radius: 8px; padding: 18px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 1rem; resize: vertical; box-sizing: border-box; line-height: 1.6; }
+    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
     
-    .run-btn { padding: 12px 24px; background: var(--secondary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 12px; transition: all 0.2s ease; font-size: 0.95rem; }
-    .run-btn:hover { background: #27ae60; transform: translateY(-1px); }
-    .output-box { background: #020617; color: #4ade80; padding: 15px; border-radius: 8px; min-height: 50px; font-family: 'Fira Code', 'Courier New', monospace; white-space: pre-wrap; margin-top: 12px; border: 1px solid #1e293b; font-size: 0.95rem; }
+    .run-btn { padding: 12px 28px; background: var(--secondary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 15px; transition: all 0.2s ease; font-size: 1rem; }
+    .run-btn:hover { background: #059669; transform: translateY(-1px); }
+    .output-box { background: #020617; color: #4ade80; padding: 18px; border-radius: 8px; min-height: 60px; font-family: 'Fira Code', 'Courier New', monospace; white-space: pre-wrap; margin-top: 15px; border: 1px solid #1e293b; font-size: 0.95rem; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5); }
 
-    /* Головна вітрина планів */
-    .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 25px; }
-    .roadmap-card { background: #f8fafc; border: 1px solid var(--border); padding: 20px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
-    .roadmap-card:hover { transform: translateY(-3px); border-color: var(--primary); background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-    .roadmap-card h4 { margin: 0 0 8px 0; color: var(--dark); font-size: 1.1rem; font-weight: 700; }
-    .roadmap-card p { margin: 0; font-size: 0.9rem; color: #64748b; }
+    .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 30px; }
+    .roadmap-card { background: #f8fafc; border: 1px solid var(--border); padding: 25px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
+    .roadmap-card:hover { transform: translateY(-3px); border-color: var(--primary); background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
+    .roadmap-card h4 { margin: 0 0 10px 0; color: var(--dark); font-size: 1.15rem; font-weight: 700; }
+    .roadmap-card p { margin: 0; font-size: 0.9rem; color: #64748b; line-height: 1.5; }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1150px) {
       .main-wrapper { flex-direction: column; }
       nav { width: auto; position: static; }
     }
@@ -91,387 +85,476 @@
 </head>
 <body>
 
-<div id="pyodide-status" class="status-loading">⏳ Завантаження ядра Python (Pyodide)...</div>
+<div id="pyodide-status" class="status-loading">-> Завантаження інтерпретатора Python...</div>
 
 <header>
-  <h1>Методологічний посібник: Основи Python</h1>
-  <p>Комплексна навчальна SPA-платформа для учнів 7–9 класів відповідно до критеріїв проектування</p>
+  <h1>Основи Python - Свободний міні-курс</h1>
+  <p>Повний навчальний міні-курс з інтерактивним середовищем виконання коду для учнів 7–9 класів</p>
 </header>
 
 <div class="main-wrapper">
   
+  <!-- НАВІГАЦІЯ ПО ЕТАПАХ -->
   <nav>
-    <h3>🗺️ Навігаційна карта</h3>
-    <button class="nav-btn active" onclick="showPage('dashboard')">🗂️ 0. Загальний план курсу</button>
-    <button class="nav-btn" onclick="showPage('p1')">🚀 1. Мотивація коду</button>
-    <button class="nav-btn" onclick="showPage('p2')">🧠 2. Синтаксис мови</button>
-    <button class="nav-btn" onclick="showPage('p3')">📦 3. Концепція змінних</button>
-    <button class="nav-btn" onclick="showPage('p4')">⌨️ 4. Взаємодія (Ввід/Вивід)</button>
-    <button class="nav-btn" onclick="showPage('p5')">⚖️ 5. Розгалуження (if)</button>
-    <button class="nav-btn" onclick="showPage('p6')">🔁 6. Циклічні процеси</button>
-    <button class="nav-btn" onclick="showPage('p7')">📋 7. Структури: Списки</button>
-    <button class="nav-btn" onclick="showPage('p8')">⚙️ 8. Процедури та Функції</button>
-    <button class="nav-btn" onclick="showPage('p9')">🏆 9. Підсумковий Проєкт</button>
+    <h3>План навчання</h3>
+    <button class="nav-btn active" onclick="showPage('dashboard')">0. Загальна концепція</button>
+    <button class="nav-btn" onclick="showPage('p1')">1. Мотивація коду</button>
+    <button class="nav-btn" onclick="showPage('p2')">2. Артикуляція синтаксису</button>
+    <button class="nav-btn" onclick="showPage('p3')">3. Концепція змінних</button>
+    <button class="nav-btn" onclick="showPage('p4')">4. Взаємодія (Ввід/Вивід)</button>
+    <button class="nav-btn" onclick="showPage('p5')">5. Розгалуження (if/else)</button>
+    <button class="nav-btn" onclick="showPage('p6')">6. Циклічні процеси</button>
+    <button class="nav-btn" onclick="showPage('p7')">7. Структури: Списки</button>
+    <button class="nav-btn" onclick="showPage('p8')">8. Процедури та Функції</button>
+    <button class="nav-btn" onclick="showPage('p9')">9. Підсумкова атестація</button>
   </nav>
 
+  <!-- КОНТЕНТ СТОРІНОК -->
   <div class="content-area">
 
+    <!-- ГОЛОВНА СТОРІНКА -->
     <div id="dashboard" class="page active">
-      <h2>📌 Загальний план проектування та критерії цілісності</h2>
-      <p>Цей посібник реалізує інтерактивну модель вивчення Python, побудовану на чотирьох обов'язкових етапах створення освітнього продукту:</p>
+      <h2>Методологія проектування та критерії цілісності курсу</h2>
+      <p>Цей комплекс побудовано на основах педагогічного проектування для середньої школи, інтегруючи чотири обов'язкові етапи життєвого циклу продукту:</p>
       
       <ul>
-        <li><b>Доцільність:</b> Кожен етап відповідає психолого-педагогічним особливостям підлітків 12-15 років.</li>
-        <li><b>Планування (зміст, структура):</b> Матеріал структуровано від абстрактної мотивації до самостійного архітектурного проектування у фіналі.</li>
-        <li><b>Розробка та наповнення:</b> Поєднання теорії, метафор, авторитетної літератури та живого компілятора коду.</li>
-        <li><b>Перегляд (перевірка на цілісність):</b> Наявність блоків зворотного зв'язку, контрольних запитань та практичних викликів.</li>
+        <li><b>Обґрунтування доцільності:</b> Переклад складних інженерних концепцій (структури даних, виділення пам'яті) на мову наочних побутових метафор, релевантних віку 12-15 років.</li>
+        <li><b>Структурне планування змісту:</b> Покрокова лінійно-концентрична траєкторія. Кожен наступний етап безпосередньо використовує та ускладнює інструменти попереднього.</li>
+        <li><b>Розробка та наповнення:</b> Поєднання фундаментальної академічної теорії, медіа-ресурсів та ізольованої пісочниці компілятора WebAssembly.</li>
+        <li><b>Перегляд (Контроль цілісності):</b> Наявність багаторівневих систем зворотного зв'язку (тести, виправлення чужого коду з помилками, архітектурні виклики).</li>
       </ul>
 
-      <h3>🎯 Педагогічна архітектура</h3>
+      <h3>Профіль методологічної тріади</h3>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Фундаментальні поняття Computer Science: змінні, умовні переходи, алгоритмічні цикли та структурування даних.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням 7–9 класів. Теорія позбавлена важкого математичного сленгу, замінена побутовими аналогіями.</div>
-        <div class="meta-item"><b>Як пояснити?</b> За допомогою циклу Колба: Подія (метафора) ➔ Рефлексія (аналіз прикладу) ➔ Концептуалізація (теорія) ➔ Активна дія (модифікація коду в консолі).</div>
+        <div class="meta-item"><b>Що пояснити?</b> Архітектуру алгоритмічного мислення, логічне структурування завдань, роботу з пам'яттю та синтаксис інженерної екосистеми Python.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням 7–9 класів (12–15 років). Матеріал адаптовано під наочно-образне та абстрактно-логічне мислення підлітка без надлишкового математичного тиску.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Трансформація абстрактного коду в життєві об'єкти (коробки, конвеєри, розвилки), підкріплена миттєвою практикою в інтерактивній консолі.</div>
       </div>
 
-      <h3>🗺️ Карта розгортання освітніх модулів</h3>
+      <h3>Модульна карта курсу</h3>
       <div class="roadmap">
-        <div class="roadmap-card" onclick="showPage('p1')"><h4>🚀 1. Мотивація</h4><p>Роль програмування, автоматизація процесів та сфера застосування Python.</p></div>
-        <div class="roadmap-card" onclick="showPage('p2')"><h4>🧠 2. Синтаксис</h4><p>Правила написання інструкцій, блочна структура через відступи.</p></div>
-        <div class="roadmap-card" onclick="showPage('p3')"><h4>📦 3. Змінні</h4><p>Робота зі сховищами оперативної пам'яті комп'ютера та типізація.</p></div>
-        <div class="roadmap-card" onclick="showPage('p4')"><h4>⌨️ 4. Ввід/Вивід</h4><p>Організація двосторонньої комунікації між користувачем і скриптом.</p></div>
-        <div class="roadmap-card" onclick="showPage('p5')"><h4>⚖️ 5. Умови</h4><p>Динамічна зміна ходу виконання алгоритму на основі булевої логіки.</p></div>
-        <div class="roadmap-card" onclick="showPage('p6')"><h4>🔁 6. Цикли</h4><p>Керування багаторазовим повторенням однотипних обчислювальних операцій.</p></div>
-        <div class="roadmap-card" onclick="showPage('p7')"><h4>📋 7. Списки</h4><p>Об'єднання розрізнених даних у єдині індексовані структури-масиви.</p></div>
-        <div class="roadmap-card" onclick="showPage('p8')"><h4>⚙️ 8. Функції</h4><p>Принципи DRY (Don't Repeat Yourself) та створення власних команд.</p></div>
-        <div class="roadmap-card" onclick="showPage('p9')"><h4>🏆 9. Міні-проєкт</h4><p>Інтеграція модулів в архітектуру гри-вікторини з підрахунком очок.</p></div>
+        <div class="roadmap-card" onclick="showPage('p1')"><h4>1. Мотивація</h4><p>Сфера застосування автоматизації. Як код керує Штучним Інтелектом (ChatGPT), GameDev та Веб-сервісами.</p></div>
+        <div class="roadmap-card" onclick="showPage('p2')"><h4>2. Синтаксис</h4><p>Граматичні правила мови. Чутливість до регістру, структура рядків та керування лапками.</p></div>
+        <div class="roadmap-card" onclick="showPage('p3')"><h4>3. Змінні</h4><p>Оперативна пам'ять комп'ютера. Створення посилань на об'єкти, оператор присвоєння (=) та базові типи даних.</p></div>
+        <div class="roadmap-card" onclick="showPage('p4')"><h4>4. Ввід/Вивід</h4><p>Побудова інтерактивного діалогу. Функції input() та print(), динамічне перетворення типів даних.</p></div>
+        <div class="roadmap-card" onclick="showPage('p5')"><h4>5. Розгалуження</h4><p>Керування логікою алгоритму через if/else. Булева алгебра (True/False) та обов'язкові структурні відступи.</p></div>
+        <div class="roadmap-card" onclick="showPage('p6')"><h4>6. Цикли</h4><p>Автоматизація рутини. Цикли for та робота з генератором діапазонів чисел range().</p></div>
+        <div class="roadmap-card" onclick="showPage('p7')"><h4>7. Списки</h4><p>Концепція індексованих масивів. Збереження великих груп інформації, нульова індексація та ітерація.</p></div>
+        <div class="roadmap-card" onclick="showPage('p8')"><h4>8. Функції</h4><p>Принцип DRY (Не повторюйся). Оголошення def, ізоляція логіки, вхідні аргументи та повернення результатів.</p></div>
+        <div class="roadmap-card" onclick="showPage('p9')"><h4>9. Проєкт</h4><p>Фінальний виклик. Інтеграція всіх вивчених концепцій у комплексну архітектуру гри-вікторини з підрахунком очок.</p></div>
       </div>
     </div>
 
+    <!-- ЕТАП 1: МОТИВАЦІЯ -->
     <div id="p1" class="page">
-      <h2>🚀 Етап 1. Мотивація: Навіщо Python?</h2>
+      <h2>Етап 1. Мотивація: Цифрова екосистема Python</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Цінність навичок кодингу в індустріях: GameDev, Веб-сайти, Штучний Інтелект.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Підліткам, сфокусованим на трендах (робототехніка, автоматизація, створення ігор).</div>
-        <div class="meta-item"><b>Як пояснити?</b> Продемонструвати, що Python — це текстовий інструмент створення цифрових світів.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Чому Python став головною мовою ХХІ століття; концепцію інтерпретатора.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Підліткам, які щодня взаємодіють з YouTube, Instagram, Netflix та Minecraft.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Демонстрація того, що код — це суперсила, яка перетворює пасивного споживача контенту на творця.</div>
       </div>
 
-      <h3>📘 Теорія та ілюстративний розбір</h3>
-      <p>Програмування — це не суха математика, а написання чітких інструкцій (рецептів) для комп'ютера. Python є світовим лідером завдяки синтаксису, що нагадує звичайну англійську мову. За його допомогою розроблені сервіси YouTube, Instagram, а також алгоритми штучного інтелекту ChatGPT.</p>
+      <h3>Теорія та ілюстративний розбір</h3>
+      <p>Комп'ютер — це неймовірно швидка, але абсолютно несамостійна машина. Він розуміє лише електричні сигнали (0 та 1). Людині писати нулями та одиницями незручно. Тому вчені створили **мови програмування високого рівня**, серед яких Python є найпопулярнішою. Спеціальна програма — **інтерпретатор** — читає наш код рядок за рядком зверху вниз, миттєво перекладаючи його на машинну мову для процесора.</p>
+      <p>Python використовується в автоматизації космічних польотів SpaceX, побудові нейромереж (генератори зображень, чат-боти) та аналізі величезних масивів даних. Навіть алгоритм рекомендацій у TikTok написаний за допомогою інструментів цієї мови.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://docs.python.org/3/" target="_blank"><span class="tag tag-book">Книга/Док</span> Офіційна документація: Python Tutorial (Вступне слово розробників)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=T_7b66G7m_g" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "ITvdn" — Що таке Python та де він використовується?</a>
-          <a class="resource-link" href="https://www.youtube.com/results?search_query=Чому+варто+вчити+Python+для+дітей" target="_blank"><span class="tag tag-search">Пошук</span> YouTube-запит: Чому варто вчити Python школярам</a>
+          <a class="resource-link" href="https://docs.python.org/3/tutorial/appetite.html" target="_blank"><span class="tag tag-book">Офіційна Документація</span> Python Tutorial: Whetting Your Appetite (Навіщо вчити Python?)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=T_7b66G7m_g" target="_blank"><span class="tag tag-video">Відеоурок ITvdn</span> Що таке Python? Сфери застосування та майбутнє мови</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=7b7pS6XisBw" target="_blank"><span class="tag tag-video">Відеоурок CodeX</span> Python для початківців з нуля — Вступне заняття</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 1</div>
-        <textarea id="code-p1">print("Привіт! Я запускаю свій перший код на Python.")</textarea>
-        <button class="run-btn" onclick="runPython('p1')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p1">Очікування дії...</div>
+        <textarea id="code-p1">print("Привіт, світе! Я досліджую середовище Python.")
+print(25 * 4 + 15) # Інтерпретатор миттєво рахує математичні вирази</textarea>
+        <button class="run-btn" onclick="runPython('p1')">▶ Запустити код рядок за рядком</button>
+        <div class="output-box" id="output-p1">Очікування запуску...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Зміни текстовий аргумент всередині функції <code>print()</code> на власне гасло та переконайся, що інтерпретатор виводить нові дані без помилок.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти код у консолі вище. Зміни текст у першому рядку всередині лапок на фразу <code>"Мій перший крок в IT"</code> і виконай знову.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Модифікуй математичний вираз у другому рядку так, щоб він вираховував кількість годин у повному році (кількість днів помножити на кількість годин у добі).</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Спробуй написати три різні команди <code>print()</code>, щоб вони вивели на екран вірш або повідомлення з трьох окремих рядків. Слідкуй, щоб лапки не губилися.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 2: СИНТАКСИС -->
     <div id="p2" class="page">
-      <h2>🧠 Етап 2. Синтаксис мови Python</h2>
+      <h2>Етап 2. Граматика та Артикуляція синтаксису</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Поняття чутливості до регістру, обов'язковість круглих дужок і правила оформлення рядків.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням, які часто роблять механічні помилки (путають великі/малі літери або забувають закрити лапки).</div>
-        <div class="meta-item"><b>Як пояснити?</b> Через аналогію із граматичними правилами у правописі.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Правила оформлення інструкцій, регістрозалежність, коментарі (<code>#</code>), роботу з лапками.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які часто роблять друкарські помилки або не розуміють повідомлень про помилки інтерпретатора.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Порівняння з граматикою людської мови (пропущена крапка чи невірна літера повністю змінюють сенс слова).</div>
       </div>
 
-      <h3>📘 Теорія та правила синтаксису</h3>
-      <p>Python працює виключно за суворими правилами. Наприклад, команда <code>print()</code> має писатися виключно маленькими літерами. Текст завжди огортається лапками (одинарними <code>'...'</code> або подвійними <code>"..."</code>), щоб комп'ютер розумів, де починаються і закінчуються слова людини.</p>
+      <h3>Теорія: Правила побудови інструкцій</h3>
+      <p>Python є **case-sensitive** (чутливим до регістру літер). Це означає, що команди `print()`, `Print()`, `PRINT()` та `prInT()` — це абсолютно різні речі для комп'ютера. Лише перший варіант є вбудованою командою, інші викликають критичну помилку `NameError`.</p>
+      <p>Текстові рядки обов'язково оточуються парними лапками. Можна використовувати як подвійні <code>"..."</code>, так і одинарні <code>'...'</code>. Вони потрібні для того, щоб інтерпретатор відрізняв команду мови від звичайного людського тексту. Символ решітки <code>#</code> позначає **коментар** — цей текст комп'ютер повністю ігнорує, він написаний виключно для людини-програміста, щоб пояснити складні місця у програмі.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://w3schools.com/python/python_syntax.asp" target="_blank"><span class="tag tag-book">Книга/Док</span> W3Schools: Python Syntax Guide (Інтерактивний посібник з граматики коду)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=3R6beV_uM3c" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "CodeX" — Урок 1: Синтаксис та перша програма</a>
-          <a class="resource-link" href="https://www.youtube.com/results?search_query=Синтаксичні+помилки+Python+для+початківців" target="_blank"><span class="tag tag-search">Пошук</span> YouTube-запит: Синтаксичні помилки та їх вирішення в Python</a>
+          <a class="resource-link" href="https://w3schools.com/python/python_syntax.asp" target="_blank"><span class="tag tag-book">W3Schools Довідник</span> Python Syntax: Інтерактивний курс базового правопису інструкцій</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=3R6beV_uM3c" target="_blank"><span class="tag tag-video">Відеоурок CodeX</span> Урок 1: Синтаксис мови та написання першої повноцінної утиліти</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=fp969VfWz8M" target="_blank"><span class="tag tag-video">Відеоурок Богдан Стащук</span> Структура коду Python, коментарі та помилки для початківців</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 2</div>
-        <textarea id="code-p2">print("Я пишу правильний код")
-print('Тут теж правильні лапки')
-print(555) # Числа можна писати без лапок</textarea>
-        <button class="run-btn" onclick="runPython('p2')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p2">Очікування дії...</div>
+        <textarea id="code-p2">print("Тут використовуються класичні подвійні лапки")
+print('Тут одинарні — і це теж абсолютно правильно!')
+# Наступний рядок — це коментар, комп'ютер його пропустить
+print(2026) # Числа лапок не потребують</textarea>
+        <button class="run-btn" onclick="runPython('p2')">▶ Тестувати граматику</button>
+        <div class="output-box" id="output-p2">Очікування тестування...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Навмисно зроби помилку: напиши слово <code>Print()</code> з великої літери "П". Запусти код, проаналізуй вікно виводу та знайди там повідомлення <code>NameError</code>.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Зроби навмисну помилку: зміни назву першої команди на <code>PRINT("Тест")</code>. Запусти її та проаналізуй повідомлення про помилку у зеленій консолі.</div>
+        <div class="task-level"><b>2. Конструкторського рівень:</b> Напиши рядок, який виведе фразу: <code>I'm learning Python!</code>. Подумай, які саме зовнішні лапки (одинарні чи подвійні) слід обрати, щоб апостроф у слові I'm не зламав код.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Виправ прихований дефект у наступному рядку (скопіюй та встав у вікно редактора): <code>print("Ми закриваємо рядок одинарною лапкою')</code>. Поясни, чому виникає помилка <code>SyntaxError: unterminated string literal</code>.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 3: ЗМІННІ -->
     <div id="p3" class="page">
-      <h2>📦 Етап 3. Концепція змінних та архітектура пам'яті</h2>
+      <h2>Етап 3. Архітектура пам'яті: Концепція змінних</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Процес резервування оперативної пам'яті через оператор присвоєння (<code>=</code>).</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням, яким важко дається розуміння абстрактного збереження даних "всередині" комп'ютера.</div>
-        <div class="meta-item"><b>Як пояснити?</b> Метафора: Змінна — це коробка з наліпкою. Наліпка — це назва змінної, а вміст коробки — її значення.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Оператор присвоєння (<code>=</code>), виділення комірок оперативної пам'яті (RAM), типи String та Integer.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які плутають знак рівності в математиці зі знаком присвоєння у кодингу.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Метафора: Змінна — це коробка в пам'яті комп'ютера. Назва коробки — це ім'я змінної, а вміст коробки — її значення.</div>
       </div>
 
-      <h3>📘 Теорія: Оператор присвоєння та типізація</h3>
-      <p>Коли ми пишемо <code>score = 10</code>, ми створюємо в оперативній пам'яті область, куди поміщаємо число 10. Знак «дорівнює» в програмуванні — це не рівність, а **команда копіювання значення справа у змінну зліва**. Python самостійно розпізнає типи даних: текст (String) чи ціле число (Integer).</p>
+      <h3>Теорія: Динамічне виділення пам'яті</h3>
+      <p>У комп'ютері є оперативна пам'ять (RAM), яка складається з мільярдів дрібних електронних комірок. Коли ми пишемо <code>player_score = 150</code>, ми даємо вказівку комп'ютеру: *«Знайди вільне місце в пам'яті, поклади туди число 150 і наклей на цю комірку ярлик з іменем player_score»*.</p>
+      <div class="architecture-box">
+[Оперативна пам'ять Комп'ютера]
+┌──────────────────┬──────────────────┐
+│ Ярлик: name      │ Значення: "Oleg" │ <-- Тип: String (Текст)
+├──────────────────┼──────────────────┤
+│ Ярлик: score     │ Значення: 150    │ <-- Тип: Integer (Ціле число)
+└──────────────────┴──────────────────┘</div>
+      <p>Знак «<code>=</code>» в програмуванні — це **оператор присвоєння**, а не математична рівність. Він працює справа наліво: обчислює значення з правого боку і записує результат у змінну, яка стоїть ліворуч. Якщо ми напишемо <code>score = score + 10</code>, комп'ютер спочатку візьме старе значення з коробки, додасть 10 і покладе новий результат назад.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="#" onclick="alert('Рекомендовано книгу: Ерік Метіз, «Прискорений курс Python» — Розділ 2: Змінні та прості типи даних.'); return false;"><span class="tag tag-book">Книга</span> Ерік Метіз: "Прискорений курс Python" (Розділ 2 — Змінні)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=Z6M6YgGWhX4" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "Богдан Стащук" — Все про змінні та типи даних</a>
-          <a class="resource-link" href="https://www.youtube.com/results?search_query=Що+таке+типи+даних+в+python" target="_blank"><span class="tag tag-search">Пошук</span> YouTube-запит: Типи даних Python простими словами</a>
+          <a class="resource-link" href="#" onclick="alert('Рекомендовано вивчити Розділ 2 книги: Ерік Метіз, «Прискорений курс Python» — присвячений правилам іменування змінних та типам об\'єктів.'); return false;"><span class="tag tag-book">Академічна Книга</span> Ерік Метіз: "Прискорений курс Python" — Розділ 2 (Змінні та прості типи)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=Z6M6YgGWhX4" target="_blank"><span class="tag tag-video">Відеоурок Богдан Стащук</span> Змінні та типи даних в Python: Теорія та практика для новачків</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=S08bCbeCO14" target="_blank"><span class="tag tag-video">Відеоурок Дика Пташка</span> Python з нуля — Змінні, ідентифікатори та правила іменування</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 3</div>
-        <textarea id="code-p3">user_name = "Андрій"
-user_age = 14
+        <textarea id="code-p3">hero_name = "Володар Вогню"
+hero_health = 100
 
-print("Користувач:", user_name)
-print("Вік:", user_age)</textarea>
-        <button class="run-btn" onclick="runPython('p3')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p3">Очікування дії...</div>
+print("Ім'я нашого персонажа:", hero_name)
+print("Початкове здоров'я:", hero_health)
+
+# Зміна вмісту змінної в пам'яті
+hero_health = hero_health - 25
+print("Здоров'я після отримання шкоди:", hero_health)</textarea>
+        <button class="run-btn" onclick="runPython('p3')">▶ Зарезервувати комірки RAM</button>
+        <div class="output-box" id="output-p3">Очікування виділення пам'яті...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>1. Створи нову змінну <code>clan</code> та надай їй значення <code>"Кібер-Воїни"</code>.</p>
-        <p>2. Виведи створену змінну на екран через функцію відображення.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти скрипт. Створи нову додаткову змінну з назвою <code>hero_level</code> та надай їй початкове значення <code>1</code>. Виведи її на екран.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Напиши блок коду, який створює змінну <code>gold = 50</code>, потім збільшує її значення вдвічі за допомогою математичного оператора множення (<code>*</code>) і виводить фінальний баланс гаманця.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Проаналізуй наступну чергу команд без запуску: `x = 10`, `y = 20`, `x = y`. Яке значення буде знаходитися всередині змінної `x` після цього? Перевір свою здогадку за допомогою написання цього коду в консолі.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 4: ВВІД ТА ВИВІД -->
     <div id="p4" class="page">
-      <h2>⌨️ Етап 4. Інтерактивна взаємодія (Ввід та Вивід)</h2>
+      <h2>Етап 4. Взаємодія з користувачем: Потік Ввід / Вивід</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Отримання зовнішніх динамічних даних від користувача через інструкцію <code>input()</code>.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Студентам, які бажають зробити програми живими, а не жорстко зафіксованими.</div>
-        <div class="meta-item"><b>Як пояснити?</b> <code>input()</code> тимчасово зупиняє скрипт і чекає, поки людина натисне "Enter" на клавіатурі.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Очікування потоку введення через <code>input()</code>, приведення типів даних (<code>int()</code>, <code>str()</code>).</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які намагаються математично додати два числа, отримані через input(), але натомість отримують склеєний текст.</div>
+        <div class="meta-item"><b>Як пояснити?</b> <code>input()</code> завжди повертає дані у вигляді тексту (в лапках). Навіть якщо користувач ввів 7, це буде рядок <code>"7"</code>, з яким не можна робити математичні операції без перетворення.</div>
       </div>
 
-      <h3>📘 Теорія: Потік введення-виведення даних</h3>
-      <p>До цього моменту наші програми були статичними. Функція <code>input("Підказка")</code> дозволяє вести діалог. Важливе правило: все, що вводить користувач, Python автоматично вважає **текстом** (String). Якщо нам потрібне число, доведеться застосувати конвертацію типу.</p>
+      <h3>Теорія: Конвертація типів у потоках</h3>
+      <p>Програма стає інтерактивною, коли вона вміє слухати користувача. Функція <code>input("Підказка")</code> призупиняє хід виконання програми, виводить на екран діалогове вікно та очікує, поки користувач введе дані й натисне Enter. </p>
+      <p>Проте існує критично важливий нюанс: **`input()` завжди сприймає введені дані як текстовий рядок (String)**. Якщо користувач введе число `14`, Python запише його в пам'ять як текст `"14"`. Спроба додати до нього одиницю викличе помилку `TypeError`. Щоб перетворити текст на справжнє математичне ціле число, його потрібно загорнути у функцію трансформації: <code>int()</code>. Цей процес називається **явним приведенням типів** (Type Casting).</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://docs.python.org/3/library/functions.html#input" target="_blank"><span class="tag tag-book">Книга/Док</span> Python Standard Library: Built-in Functions (Специфікація input та print)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=q6_yqMh0x-I" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "Дика Пташка" — Робота з функцією введення користувача</a>
+          <a class="resource-link" href="https://docs.python.org/3/library/functions.html#input" target="_blank"><span class="tag tag-book">Офіційна Специфікація</span> Built-in Functions: Детальний опис параметрів input() та print()</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=q6_yqMh0x-I" target="_blank"><span class="tag tag-video">Відеоурок Дика Пташка</span> Введення даних через input(). Перетворення типів даних int, float, str</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 4</div>
-        <textarea id="code-p4">favorite_game = input("Яка твоя улюблена комп'ютерна гра? ")
-print("Круто! Гра", favorite_game, "дійсно має класну графіку.")</textarea>
-        <button class="run-btn" onclick="runPython('p4')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p4">Очікування дії...</div>
+        <textarea id="code-p4"># Приклад роботи з текстом
+user_name = input("Введіть своє ім'я у віконце: ")
+print("Приємно познайомитись, " + user_name + "!")
+
+# Приклад роботи з числами та трансформацією типу
+birth_year_str = input("Введіть рік вашого народження: ")
+birth_year = int(birth_year_str) # Конвертуємо текст у математичне число
+age_in_2026 = 2026 - birth_year
+print("У 2026 році ваш вік становить або становитиме:", age_in_2026)</textarea>
+        <button class="run-btn" onclick="runPython('p4')">▶ Запустити інтерактивний діалог</button>
+        <div class="output-box" id="output-p4">Очікування введення даних користувачем...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Запусти код. У спливаючому віконці браузера введи назву гри. Переконайся, що скрипт підставив твоє значення у фінальне речення.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти код, введи у спливаючі вікна браузера свої дані та подивись на математичний прорахунок віку.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Напиши міні-калькулятор периметра квадрата: програма запитує довжину сторони за допомогою <code>input()</code>, конвертує її у число через <code>int()</code>, множить на 4 і виводить результат.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Що станеться, якщо у вікно запиту року народження ввести випадкове слово замість цифр? Запусти код знову, введи текст та вивчи опис помилки <code>ValueError: invalid literal for int()</code>. Як програміст може захистити програму від такого збою?</div>
       </div>
     </div>
 
+    <!-- ЕТАП 5: УМОВИ -->
     <div id="p5" class="page">
-      <h2>⚖️ Етап 5. Керування логікою: Розгалуження (if / else)</h2>
+      <h2>Етап 5. Керування логікою: Умовні розгалуження (if / else)</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Оператори умовних переходів, порівняння значень та концепцію структурних відступів (4 пробіли).</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням, які починають будувати розгалужені сценарії та логічні ланцюжки.</div>
-        <div class="meta-item"><b>Як пояснити?</b> Метафора: Блок `if` — це розвилка на дорозі. Якщо умова виконується, ми йдемо по одній дорозі, інакше (`else`) — по іншій.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Булевий тип (True/False), оператори порівняння (<code>==</code>, <code>&gt;=</code>, <code>!=</code>), синтаксис відступів.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які забувають ставити двокрапку в кінці умови або плутають одинарне дорівнює (присвоєння) з подвійним дорівнює (порівняння).</div>
+        <div class="meta-item"><b>Як пояснити?</b> Правило відступів — це закон блочної ієрархії. Кроки, які мають чотири пробіли попереду, виконуються ТІЛЬКИ тоді, коли умова зверху виявилася правдою.</div>
       </div>
 
-      <h3>📘 Теорія: Логічні вирази та відступи в Python</h3>
-      <p>В Python відступи (натискання клавіші Tab або 4 пробіли) є критично важливими. Вони показують комп'ютеру, який саме шматок коду належить до умови `if`, а який виконується в будь-ньому випадку. Двокрапка в кінці умови сигналізує про початок блоку.</p>
+      <h3>Теорія: Булева логіка та блоки відступів</h3>
+      <p>Умовний оператор дозволяє програмі приймати рішення самостійно залежно від обставин. В основі лежить перевірка виразу, який може бути або правдою (**True**), або брехнею (**False**). Для порівняння значень використовуються спеціальні знаки: <code>==</code> (перевірка на рівність), <code>&gt;</code> (більше), <code>&lt;</code> (менше), <code>!=</code> (не дорівнює).</p>
+      <p>На відміну від багатьох інших мов програмування, де блоки коду виділяються фігурними дужками, в Python для цього використовуються **структурні відступи (4 пробіли або клавіша Tab)**. Двокрапка в кінці інструкції `if` або `else` каже інтерпретатору: *«Увага, далі йде підпорядкований блок коду»*.</p>
+      
+      <div class="architecture-box">
+if age >= 18:
+──── print("Доступ дозволено") # Виконається лише якщо True
+else:
+──── print("Доступ заблоковано") # Виконається лише якщо False</div>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="#" onclick="alert('Рекомендовано посібник: Марк Лутц, «Вивчаємо Python» — Том 1, Глава 12: Умовні оператори та правила відступів.'); return false;"><span class="tag tag-book">Книга</span> Марк Лутц: "Вивчаємо Python" (Том 1, Розділ умовних інструкцій)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=2cI9_6w84V4" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Логічні розгалуження та оператори порівняння</a>
+          <a class="resource-link" href="#" onclick="alert('Рекомендовано вивчити Том 1, Глава 12 фундаментального підручника: Марк Лутц, «Вивчаємо Python» — детальний опис умовних переходів та філософії відступів.'); return false;"><span class="tag tag-book">Фундаментальний підручник</span> Марк Лутц: "Вивчаємо Python" (Том 1, Глава 12 — Керуючі інструкції)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=2cI9_6w84V4" target="_blank"><span class="tag tag-video">Відеоурок ITvdn</span> Конструкції розгалуження: if, elif, else та оператори порівняння</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 5</div>
-        <textarea id="code-p5">points = 15
+        <textarea id="code-p5">secret_password = "cyber_ninja"
 
-if points >= 10:
-    print("Твій рівень знань достатній для переходу на наступний етап!")
+user_input = input("Введіть пароль доступу: ")
+
+if user_input == secret_password:
+    print("Доступ надано! Вітаємо у секретному сховищі.")
+    print("Твій рівень доступу: Адміністратор.")
 else:
-    print("Потрібно набрати ще трохи балів.")</textarea>
-        <button class="run-btn" onclick="runPython('p5')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p5">Очікування дії...</div>
+    print("Пароль невірний! Систему безпеки активовано.")</textarea>
+        <button class="run-btn" onclick="runPython('p5')">▶ Перевірити логічні розгалуження</button>
+        <div class="output-box" id="output-p5">Очікування логічного вибору...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Зміни значення змінної <code>points</code> на число 5. Запусти код та перевір, як змінився результат виконання алгоритму.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти код. Введи пароль <code>cyber_ninja</code> та переконайся у спрацьовуванні першого блоку інструкцій. Потім запусти знову і введи невірний пароль.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Напиши перевірку оцінки учня. Користувач вводить число балів (від 1 до 12). Якщо бал більший або дорівнює 10, виведи повідомлення: <code>"Чудовий результат!"</code>, в іншому випадку — <code>"Потрібно ще потренуватися."</code></div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Досліди роботу оператора <code>elif</code> (скорочення від else if) для перевірки трьох станів. Напиши алгоритм контролю температури води: якщо температура менша або дорівнює 0 — це "Лід", якщо більша або дорівнює 100 — це "Пара", в інших випадках — "Рідина".</div>
       </div>
     </div>
 
+    <!-- ЕТАП 6: ЦИКЛИ -->
     <div id="p6" class="page">
-      <h2>🔁 Етап 6. Циклічні процеси (for / range)</h2>
+      <h2>Етап 6. Алгоритмічна автоматизація: Циклічні процеси</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Поняття лічильника ітерацій, автоматизацію рутинної роботи та роботу з функцією діапазонів <code>range()</code>.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням, які розуміють неефективність копіювання однакових рядків коду вручну.</div>
-        <div class="meta-item"><b>Як пояснити?</b> Замість написання команди print 100 разів, ми створюємо цикл, який крутиться задану кількість кіл.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Керування повтореннями через <code>for</code>, ітераційну змінну, роботу параметрів генератора <code>range(start, stop)</code>.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які копіюють блоки коду вручну для виконання однакових дій.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Функція range(1, 6) створює числовий конвеєр. Цикл бере перше число, виконує з ним код, повертається на початок, бере друге число і так далі, поки конвеєр не закінчиться.</div>
       </div>
 
-      <h3>📘 Теорія: Конструкція циклу For</h3>
-      <p>Цикл <code>for i in range(5):</code> створює тимчасову змінну-лічильник <code>i</code>, яка автоматично послідовно набуває значень від 0 до 4. Код всередині відступу виконується рівно 5 разів. Це незамінно при прорахунку циклів у іграх або генерації списків.</p>
+      <h3>Теорія: Конструкція циклу For та межа ітерацій</h3>
+      <p>Цикли потрібні для того, щоб змусити комп'ютер виконувати рутинну роботу миттєво. Замість написання десяти окремих рядків <code>print()</code>, ми описуємо дію один раз всередині циклу.</p>
+      <p>Конструкція <code>for i in range(1, 6):</code> розшифровується так: створи змінну-лічильник `i` та запускай блок коду з відступом для кожного числа з діапазону. **Важливе правило функції range(start, stop): вона ніколи не включає в себе останнє число (stop)**. Тобто `range(1, 6)` згенерує числа 1, 2, 3, 4, 5. Число 6 використано як стоп-сигнал, на якому цикл зупиняє роботу.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://w3schools.com/python/python_for_loops.asp" target="_blank"><span class="tag tag-book">Книга/Док</span> W3Schools: Python Loops Reference (Практичні зразки застосування циклів)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=LqUonwzYF94" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "Senior Pomidor" — Все про цикли for та while</a>
+          <a class="resource-link" href="https://w3schools.com/python/python_for_loops.asp" target="_blank"><span class="tag tag-book">W3Schools Довідник</span> Python For Loops: Приклади керування кроком ітерацій (step)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=LqUonwzYF94" target="_blank"><span class="tag tag-video">Відеоурок Senior Pomidor</span> Все про цикли for та while в Python для новачків простими словами</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 6</div>
-        <textarea id="code-p6">for i in range(1, 6):
-    print("Круг циклу №", i)</textarea>
-        <button class="run-btn" onclick="runPython('p6')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p6">Очікування дії...</div>
+        <textarea id="code-p6">print("Початок зворотного відліку двигунів ракети:")
+
+for counter in range(5, 0, -1): # Крок -1 означає рух у зворотний бік
+    print("До старту залишилось:", counter)
+
+print("Старт! Ракета вийшла на навколоземну орбіту.")</textarea>
+        <button class="run-btn" onclick="runPython('p6')">▶ Запустити циклічний конвеєр</button>
+        <div class="output-box" id="output-p6">Очікування ітерацій...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Зміни параметри функції генератора на <code>range(1, 11)</code>. Запусти скрипт та перевір, чи вивелося на екран число 10.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти наявний код. Зміни параметри діапазону так, щоб зворотний відлік починався з числа 10.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Напиши програму, яка виводить таблицю множення на число 5 (від 1 до 10). Результат виводу має виглядати так: `1 * 5 = 5`, `2 * 5 = 10` і так далі. Використовуй лічильник всередині циклу для множення.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Напиши код, який за допомогою циклу рахує суму всіх цілих чисел від 1 до 50 (математичний результат має дорівнювати 1275). Тобі знадобиться додаткова змінна суматор, створена ДО початку циклу.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 7: СПИСКИ -->
     <div id="p7" class="page">
-      <h2>📋 Етап 7. Структури даних: Списки</h2>
+      <h2>Етап 7. Структури даних: Індексовані списки</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Концепцію масивів об'єктів, квадратні дужки <code>[]</code> та правило індексації з нуля.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Учням, перед якими постає задача збереження великої групи пов'язаних сутностей.</div>
-        <div class="meta-item"><b>Як пояснити?</b> Список — це рюкзак із секціями. Перша секція завжди підписана номером 0, друга — 1 і так далі.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Оголошення квадратними дужками <code>[]</code>, адресація елементів за індексом з 0, динамічний метод <code>.append()</code>.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які намагаються дістати третій елемент списку за допомогою індексу [3] і отримують помилку виходу за межі масиву.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Нумерація в програмуванні завжди стартує з нуля. Якщо у списку 3 елементи, їхні індекси — 0, 1, 2. Спроба викликати елемент №3 призведе до збою, бо четвертого елемента немає.</div>
       </div>
 
-      <h3>📘 Теорія: Робота з індексами масивів</h3>
-      <p>Окремі змінні не здатні ефективно утримати великі бази даних. Список дозволяє об'єднати елементи через кому: <code>items = ["A", "B", "C"]</code>. Щоб дістати перший елемент, ми звертаємось до його нульового індексу: <code>items[0]</code>.</p>
+      <h3>Теорія: Концепція масивів та керування індексами</h3>
+      <p>Досі ми зберігали у кожній змінній лише один об'єкт. Але що робити, якщо потрібно зберегти інвентар гравця або список з тисячі клієнтів? Створювати тисячу окремих змінних неможливо. Для цього існують **структури даних**, найпростіша з яких — **список** (List).</p>
+      <p>Елементи списку записуються всередині квадратних дужок через кому. Кожен елемент отримує свій порядковий номер — **індекс**. Нумерація починається з **0**. Метод <code>.append()</code> дозволяє динамічно додавати нові елементи в кінець наявного списку під час роботи програми.</p>
+      
+      <div class="architecture-box">
+список: inventory = ["меч", "щит", "зілля"]
+індекси:                0       1       2
+кількість елементів (довжина списку): len(inventory) = 3</div>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://w3schools.com/python/python_lists.asp" target="_blank"><span class="tag tag-book">Книга/Док</span> Довідник масивів: Python Lists (Методи append, pop, sort)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=I7X9gXf-Y9w" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Списки в Python, індекси та зрізи</a>
+          <a class="resource-link" href="https://w3schools.com/python/python_lists.asp" target="_blank"><span class="tag tag-book">W3Schools Довідник</span> Python Lists: Повне керівництво з методів масивів (pop, insert, sort)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=I7X9gXf-Y9w" target="_blank"><span class="tag tag-video">Відеоурок CodeX</span> Робота зі списками: базові операції, індекси, зрізи масивів</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 7</div>
-        <textarea id="code-p7">friends = ["Максим", "Олена", "Данило"]
-print("Мій найкращий друг під індексом 0:", friends[0])
+        <textarea id="code-p7">inventory = ["Лазерний меч", "Енергетичний щит"]
 
-print("\nВесь список друзів через цикл:")
-for friend in friends:
-    print("-", friend)</textarea>
-        <button class="run-btn" onclick="runPython('p7')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p7">Очікування дії...</div>
+# Додаємо третій елемент динамічно
+inventory.append("Аптечка")
+
+print("Всього предметів у рюкзаку:", len(inventory))
+print("Перший предмет (індекс 0):", inventory[0])
+print("Третій предмет (індекс 2):", inventory[2])</textarea>
+        <button class="run-btn" onclick="runPython('p7')">▶ Ініціалізувати структури даних</button>
+        <div class="output-box" id="output-p7">Очікування створення списку...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Додай всередину списку четверте ім'я у лапках через кому. Зміни індекс у першому <code>print()</code> на число 3 та перевір вивід.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти код. Спробуй вивести на екран другий елемент масиву (індекс 1). Напиши для цього окрему інструкцію <code>print()</code>.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Поєднай цикли та списки. Створи список з чотирьох міст. Напиши цикл <code>for city in cities:</code>, який послідовно виводить кожне місто на екран з префіксом <code>"Місто: ..."</code>.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Що станеться, якщо спробувати виконати інструкцію <code>print(inventory[5])</code> на поточному масиві? Скопіюйте цей рядок у редактор, запустіть код та детально розберіть сутність виникнення помилки <code>IndexError: list index out of range</code>.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 8: ФУНКЦІЇ -->
     <div id="p8" class="page">
-      <h2>⚙️ Етап 8. Процедури та Функції (def)</h2>
+      <h2>Етап 8. Модульне проектування: Процедури та Функції</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що пояснити?</b> Оголошення функцій за допомогою оператора <code>def</code>, аргументи та виклик за іменем.</div>
-        <div class="meta-item"><b>Кому пояснити?</b> Просунутим учням, що переходять до блочно-модульного мислення в розробці архітектури ПЗ.</div>
-        <div class="meta-item"><b>Як пояснити?</b> Функція — це створення власної нової команди для мови Python. Створив один раз — викликаєш всюди.</div>
+        <div class="meta-item"><b>Що пояснити?</b> Оголошення <code>def</code>, локальну область видимості змінних, аргументи, оператор повернення <code>return</code>.</div>
+        <div class="meta-item"><b>Кому пояснити?</b> Учням, які пишуть один велетенський масив коду, де важко знайти помилку.</div>
+        <div class="meta-item"><b>Як пояснити?</b> Функція — це міні-завод всередині програми. Вона приймає сировину (аргументи), виконує закриту роботу і видає готовий продукт (через return). Все, що відбувається всередині заводу, приховано від решти світу.</div>
       </div>
 
-      <h3>📘 Теорія: Створення власних алгоритмічних блоків</h3>
-      <p>Функція — це ізольований фрагмент коду, який виконується лише тоді, коли його викликають за назвою. Вони допомагають структурувати код, уникаючи дублювання підпрограм. У дужках функції можна передавати «параметри» (вхідні змінні).</p>
+      <h3>Теорія: Принцип DRY та ізоляція коду</h3>
+      <p>Під час написання великих програм певні послідовності дій починають повторюватися. Копіювання однакових шматків коду призводить до роздування файлів та появи багів. Професійні розробники використовують принцип **DRY (Don't Repeat Yourself)** — Не повторюйся.</p>
+      <p>За допомогою ключового слова <code>def</code> ми можемо створити власну команду (функцію), дати їй унікальне ім'я та описати її логіку один єдиний раз. У дужках вказуються **параметри** — змінні, які функція очікує отримати ззовні для обробки. Оператор <code>return</code> повертає результат роботи функції назад у головний код програми.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="#" onclick="alert('Рекомендовано посібник: Ал Свейгарт, «Автоматизація нудних завдань за допомогою Python» — Розділ 3: Функції.'); return false;"><span class="tag tag-book">Книга</span> Ал Свейгарт: "Автоматизація нудних задач за допомогою Python" (Глава 3)</a>
-          <a class="resource-link" href="https://www.youtube.com/watch?v=vVEnVvH8XbM" target="_blank"><span class="tag tag-video">Відеоурок</span> YouTube: Канал "IT Сектор" — Створення та виклик функцій def</a>
+          <a class="resource-link" href="#" onclick="alert('Рекомендовано вивчити Главу 3 книги: Ал Свейгарт, «Автоматизація нудних завдань за допомогою Python» — де детально описано архітектуру функцій та поняття локальної області видимості.'); return false;"><span class="tag tag-book">Академічна Книга</span> Ал Свейгарт: "Автоматизація нудних завдань" — Глава 3 (Функції та повернення значень)</a>
+          <a class="resource-link" href="https://www.youtube.com/watch?v=vVEnVvH8XbM" target="_blank"><span class="tag tag-video">Відеоурок IT Сектор</span> Функції в Python: Створення користувацьких команд через def та оператор return</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Консоль коду етапу 8</div>
-        <textarea id="code-p8">def greet_gamer(nickname):
-    print("✨ Вітаємо, " + nickname + "!")
-    print("🚀 Твій ігровий профіль успішно завантажено.\n")
+        <textarea id="code-p8"># Оголошення нашої власної функції обчислення площі
+def calculate_area(width, height):
+    result = width * height
+    return result
 
-# Виклики нашої власної команди
-greet_gamer("Cyber_King")
-greet_gamer("Sniper_99")</textarea>
-        <button class="run-btn" onclick="runPython('p8')">▶ Виконати інструкцію</button>
-        <div class="output-box" id="output-p8">Очікування дії...</div>
+# Виклик функції з різними параметрами
+room1_area = calculate_area(5, 4)
+room2_area = calculate_area(3, 3)
+
+print("Площа першої кімнати:", room1_area, "кв.м.")
+print("Площа другої кімнати:", room2_area, "кв.м.")</textarea>
+        <button class="run-btn" onclick="runPython('p8')">▶ Компілювати архітектуру функцій</button>
+        <div class="output-box" id="output-p8">Очікування виклику підпрограм...</div>
       </div>
 
       <div class="control-box">
-        <h4>🏁 Завдання для контролю:</h4>
-        <p>Допиши в кінець файлу ще один виклик функції <code>greet_gamer</code>, передавши туди як аргумент своє ім'я.</p>
+        <h4>Багаторівневі завдання для контролю:</h4>
+        <div class="task-level"><b>1. Базовий рівень:</b> Запусти код. Додай третій виклик функції для кімнати зі сторонами 6 та 8 метрів і виведи результат.</div>
+        <div class="task-level"><b>2. Конструкторський рівень:</b> Напиши функцію <code>convert_to_usd(uah_amount)</code>, яка приймає суму в гривнях, ділить її на курс (наприклад, 41) і повертає значення в доларах. Виклич її для перевірки.</div>
+        <div class="task-level"><b>3. Евристичний виклик:</b> Створи функцію <code>is_even(number)</code>, яка повертає **True**, якщо число парне, і **False**, якщо непарне (підказка: використовуй оператор остачі від ділення <code>% 2 == 0</code>). Перевір роботу функції всередині умови `if`.</div>
       </div>
     </div>
 
+    <!-- ЕТАП 9: ПРОЄКТ -->
     <div id="p9" class="page">
-      <h2>🏆 Етап 9. Підсумковий Міні-проєкт: Вікторина</h2>
+      <h2>Етап 9. Підсумкова атестація: Створення ігрової архітектури</h2>
       <div class="meta-grid">
-        <div class="meta-item"><b>Що оцінюємо?</b> Вміння інтегрувати функції, умови, змінні та списки в єдиний робочий продукт.</div>
-        <div class="meta-item"><b>Кому доручити?</b> Учням як фінальну атестаційну роботу для демонстрації отриманих компетенцій.</div>
-        <div class="meta-item"><b>Контроль цілісності:</b> Перевірка архітектурного мислення та обробки логічних розгалужень.</div>
+        <div class="meta-item"><b>Що оцінюємо?</b> Рівень інтеграції отриманих знань: поєднання змінних, циклів, списків та умовних операторів у єдиний монолітний продукт.</div>
+        <div class="meta-item"><b>Кому доручити?</b> Учням як фінальну перевірочну роботу курсу. Таке завдання розвиває інженерне мислення розробника.</div>
+        <div class="meta-item"><b>Критерії цілісності:</b> Програма має коректно обробляти помилкові введення користувача, рахувати статистику та демонструвати логічний фінал.</div>
       </div>
 
-      <h3>📘 Інструкція до розгортання проєкту</h3>
-      <p>Перед тобою прототип консольної текстової гри. Твоє завдання — запустити її, пройти інтерактивний тест через діалогові вікна, детально вивчити структуру взаємодії коду та модернізувати гру додатковими блоками запитань.</p>
+      <h3>Інструкція до фінального релізу</h3>
+      <p>Перед тобою повноцінна консольна інтерактивна гра-вікторина. Вона містить базу запитань та механіку оцінки відповідей. Твоя мета — запустити гру, пройти її як користувач, детально проаналізувати логіку взаємодії кожного рядка коду та розширити її можливості відповідно до вимог підсумкової атестації.</p>
 
       <div class="resources-box">
-        <h4>📚 Джерела та рекомендована література</h4>
+        <h4>Глибокі теоретичні джерела та медіа-ресурси</h4>
         <div class="resources-list">
-          <a class="resource-link" href="https://realpython.com/python-quiz-application/" target="_blank"><span class="tag tag-book">Книга/Док</span> RealPython: Building a Quiz Application (Архітектура побудови ігор на Python)</a>
-          <a class="resource-link" href="https://www.youtube.com/results?search_query=Створення+текстових+ігор+на+python" target="_blank"><span class="tag tag-search">Пошук</span> YouTube-запит: Як створити текстову гру на Python з нуля</a>
+          <a class="resource-link" href="https://realpython.com/python-quiz-application/" target="_blank"><span class="tag tag-book">RealPython Гайд</span> Building a Quiz Application in Python (Аналіз розгортання комерційних архітектур ігор)</a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=Створення+ігор+на+python+для+початківців" target="_blank"><span class="tag tag-video">Пошук YouTube</span> Як створити текстові ігри на Python з нуля: методичні розбори</a>
         </div>
       </div>
 
       <div class="editor-zone">
         <div class="editor-label">Фінальна консоль проєкту</div>
-        <textarea id="code-p9">print("=== СТАРТ КІБЕР-ВІКТОРИНИ ===")
+        <textarea id="code-p9">print("=== ЛАСКАВО ПРОСИМО ДО КІБЕР-ВІКТОРИНИ ===")
 score = 0
 
-ans1 = input("Який знак використовується для створення відступів в Python? (введіть слово: таб або плюс)")
-
-if ans1.lower() == "таб":
-    print("🎯 Правильно! Клавіша Tab створює блок коду.")
+# Запитання 1
+ans1 = input("Яка функція конвертує текст у ціле число? ")
+if ans1.lower() == "int":
+    print("Блискуче! Це правильна відповідь.")
     score = score + 1
 else:
-    print("❌ Неправильно. Правильна відповідь — таб.")
+    print("Помилка. Правильна відповідь — int.")
 
-print("\nТвій фінальний рахунок балів:", score)</textarea>
-        <button class="run-btn" onclick="runPython('p9')">▶ Запустити гру-вікторину</button>
-        <div class="output-box" id="output-p9">Очікування компіляції проєкту...</div>
+# Запитання 2
+print("\nНаступне запитання:")
+ans2 = input("З якого числа починаються індекси в списках? ")
+if ans2 == "0":
+    print("Абсолютно вірно!")
+    score = score + 1
+else:
+    print("Не вгадав. Індексація стартує з нуля.")
+
+print("\n=== ГРУ ЗАВЕРШЕНО ===")
+print("Твій підсумковий результат балів:", score, "з 2 можливих.")</textarea>
+        <button class="run-btn" onclick="runPython('p9')">🚀 Запустити фінальний продукт</button>
+        <div class="output-box" id="output-p9">Очікування запуску ігрового двигуна...</div>
       </div>
 
       <div class="control-box">
-        <h4>🎓 Підсумкове випускне завдання:</h4>
-        <p>Розшир код гри: додай змінну <code>ans2</code>, яка запитує у користувача: <i>"З якого числа починаються індекси у списках?"</i>. Напиши умову перевірки на правильну відповідь <code>"0"</code>.</p>
+        <h4>🎓 Підсумкове випускне завдання на реліз програми:</h4>
+        <p>Модернізуй архітектуру гри. Додай третє запитання: <i>"Який символ використовується для написання коментарів в Python?"</i>. Напиши логічний блок перевірки відповіді на символ решітки (<code>"#"</code>). Не забудь збільшити лічильник балів <code>score</code> у разі успіху та оновити фінальний текстовий рядок виводу результату на <code>з 3 можливих</code>.</p>
       </div>
     </div>
 
@@ -479,28 +562,24 @@ print("\nТвій фінальний рахунок балів:", score)</textar
 </div>
 
 <script>
-// Глобальний стан середовища
+// Глобальний стан середовища виконання коду
 let pyodideReady = false;
 let pyodideInstance;
 
-// Функція перемикання сторінок SPA
+// Функція навігації та перемикання сторінок SPA
 function showPage(pageId) {
-  // Приховуємо всі контентні блоки
   const pages = document.querySelectorAll('.page');
   for (let i = 0; i < pages.length; i++) {
     pages[i].classList.remove('active');
   }
 
-  // Знімаємо підсвітку кнопок навігації
   const buttons = document.querySelectorAll('.nav-btn');
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].classList.remove('active');
   }
   
-  // Активуємо потрібну сторінку
   document.getElementById(pageId).classList.add('active');
   
-  // Шукаємо та активуємо кнопку навігації
   for (let i = 0; i < buttons.length; i++) {
     if (buttons[i].getAttribute('onclick').indexOf(pageId) !== -1) {
       buttons[i].classList.add('active');
@@ -510,37 +589,40 @@ function showPage(pageId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Ініціалізація Pyodide
+// Init Pyodide
 async function initPythonEnvironment() {
   try {
     pyodideInstance = await loadPyodide({
-  	  indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.4/full/"
-  	});
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.4/full/"
+    });
     
-    // Перевизначаємо вбудовану функцію input на рівні ядра Python
-    // Використовуємо чисту ін'єкцію через global namespace без exec ланцюжків
-    pyodideInstance.registerJsProxy("browser_prompt", function(text) {
+    // Create JS-bridge for the purposes of prompt() pop-up windows handling
+    const browserPrompt = function(text) {
       let val = prompt(text);
       return val !== null ? val : "";
-    });
+    };
+    
+	// Register prompt in global Python kernel namespace
+    pyodideInstance.globals.set("browser_prompt", browserPrompt);
 
+	// Bind internal input() tool to Python via JS bridge
     await pyodideInstance.runPythonAsync(`
-import builtins
-import js
+		import builtins
+		import js
 
-def python_input_bridge(prompt_text=""):
-    return js.browser_prompt(prompt_text)
+		def python_input_bridge(prompt_text=""):
+			return js.globals.get("browser_prompt")(prompt_text)
 
-builtins.input = python_input_bridge
-`);
+		builtins.input = python_input_bridge
+	`);
 
     pyodideReady = true;
     
-    // Візуалізація успішного завантаження ядра
+	// Notify that Pyodide is ready
     const statusWidget = document.getElementById("pyodide-status");
-    statusWidget.textContent = "✅ Python 3 Core Готовий!";
-    statusWidget.style.background = "#c6f6d5";
-    statusWidget.style.color = "#22543d";
+    statusWidget.textContent = "Модулі Python 3 активовано!";
+    statusWidget.style.background = "#d1fae5";
+    statusWidget.style.color = "#065f46";
     
     setTimeout(function() {
       statusWidget.style.opacity = '0';
@@ -548,51 +630,51 @@ builtins.input = python_input_bridge
     }, 2000);
 
   } catch(e) {
-    document.getElementById("pyodide-status").textContent = "❌ Збій завантаження інтерпретатора.";
-    console.error(e);
+    document.getElementById("pyodide-status").textContent = "Збій завантаження інтерпретатора.";
+    console.error("Error initializing WebAssembly environment - ", e);
   }
 }
 
-// Запускаємо ініціалізацію ядра одразу після завантаження дерева сторінки
+// Run env right after DOM is done
 initPythonEnvironment();
 
-// Спільний обробник запуску коду для ізольованих етапів
+// Asynchronous code handler for each selected section
 async function runPython(sectionId) {
   const outputContainer = document.getElementById("output-" + sectionId);
   const rawCode = document.getElementById("code-" + sectionId).value;
 
   if (!pyodideReady) {
-    outputContainer.textContent = "Помилка: Ядро Python ще завантажується оперативною пам'яттю.";
+    outputContainer.textContent = "Помилка: Віртуальна машина Python ще завантажується в пам'ять браузера.";
     return;
   }
 
-  outputContainer.textContent = "Виконання коду...";
+  outputContainer.textContent = "Компіляція та запуск...";
 
   try {
-    // Встановлюємо віртуальний буфер виводу (sys.stdout)
+	// Substitute sys.stdout with StringIO
     await pyodideInstance.runPythonAsync(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-`);
+		import sys
+		from io import StringIO
+		sys.stdout = StringIO()
+	`);
 
-    // Передаємо чистий код скрипту у глобальний простір імен без обгорток exec
-    // Це повністю усуває проблеми з екрануванням лапок та символу переносу рядка
+	// Safely delegating clean script code to global variable in order to deal with possible quotation marks issues
     pyodideInstance.globals.set("custom_user_script", rawCode);
     
     await pyodideInstance.runPythonAsync(`
-try:
-    exec(custom_user_script, globals())
-except Exception as script_err:
-    print("Помилка в твоєму коді:\\n", script_err)
-`);
+		try:
+			exec(custom_user_script, globals())
+		except Exception as script_err:
+			print("Помилка в твоєму коді:\\n", script_err)
+	`);
 
-    // Читаємо накопичений буфер виводу та відображаємо у дитині
+	// Read aggregated data from stdout buffer
     let consoleOutput = await pyodideInstance.runPythonAsync("sys.stdout.getvalue()");
-    outputContainer.textContent = consoleOutput || "Інструкція виконана успішно (додай функцію print() для відображення результату).";
+	// Let know if there is no text output
+    outputContainer.textContent = consoleOutput || "Код виконано успішно. (Додай функцію print() для виведення результату на екран).";
 
   } catch(err) {
-    outputContainer.textContent = "Критична помилка компілятора:\n" + err;
+    outputContainer.textContent = "Критичний збій компілятора:\n" + err;
   }
 }
 </script>
