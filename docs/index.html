@@ -513,7 +513,9 @@ function showPage(pageId) {
 // Ініціалізація Pyodide
 async function initPythonEnvironment() {
   try {
-    pyodideInstance = await loadPyodide();
+    pyodideInstance = await loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/"
+    });
     
     // Перевизначаємо вбудовану функцію input на рівні ядра Python
     // Використовуємо чисту ін'єкцію через global namespace без exec ланцюжків
